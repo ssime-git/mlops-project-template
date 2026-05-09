@@ -47,8 +47,46 @@ uv sync --extra dev
 
 ## Usage
 
+### Hydra Configuration
+
+This template uses **Hydra** for composition-based config management.
+
+**Basic usage:**
 ```bash
-# Run training
+# Run with default config
+python -m ml_project train
+
+# Override parameters via command line
+python -m ml_project train model.n_estimators=200 training.cv_folds=3
+
+# Use a different model config
+python -m ml_project train model=LightGBM
+```
+
+**Config structure:**
+- `configs/default.yaml` — base defaults
+- `configs/model/*.yaml` — model-specific configs  
+- `configs/train.yaml` — training settings
+
+**Composition example:**
+```yaml
+# configs/train.yaml
+defaults:
+  - _self_
+  - model: default  # loads configs/model/default.yaml
+
+data:
+  raw_path: data/raw/train.csv
+  test_size: 0.2
+```
+
+**Multirun (sweep hyperparams):**
+```bash
+python -m ml_project train model.n_estimators=100,200,300
+```
+
+```bash
+# Run training with explicit config
 python -m ml_project train --config configs/train.yaml
 
 # Run tests
