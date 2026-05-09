@@ -1,0 +1,23 @@
+# Training Container Dockerfile
+# Phase 1: Containerized training pipeline
+
+FROM python:3.10-slim
+
+# Install UV
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+WORKDIR /app
+
+# Copy dependencies first for caching
+COPY pyproject.toml .
+
+# Install all dependencies
+RUN uv pip install --system -r pyproject.toml
+
+# Copy source code
+COPY src/ ./src/
+COPY configs/ ./configs/
+COPY data/ ./data/
+
+# Default command (can be overridden)
+CMD ["python", "-m", "ml_project", "train"]
