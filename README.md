@@ -1,6 +1,20 @@
-# ML Project - MLOPS
+# MLOps Project Template
 
 Production-ready machine learning project with UV package management.
+
+## 🚀 First Step: Define Your Problem
+
+**Before writing any code, fill out `configs/problem.yaml`** — this forces you to:
+
+1. Articulate the business problem
+2. Define success metrics (ML + business)
+3. Establish a baseline to beat
+4. Identify constraints (latency, hardware)
+
+```bash
+# Edit your problem definition
+code configs/problem.yaml
+```
 
 ## Project Structure
 
