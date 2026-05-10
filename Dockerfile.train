@@ -8,16 +8,19 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 WORKDIR /app
 
-# Copy dependencies first for caching
+# Copy the entire workspace for uv sync
 COPY pyproject.toml .
-
-# Install all dependencies
-RUN uv pip install --system -r pyproject.toml
-
-# Copy source code
 COPY src/ ./src/
 COPY configs/ ./configs/
+
+# Install workspace packages (all dependencies including dev for debugging)
+RUN uv sync --no-dev
+
+# Copy data (can be mounted instead in production)
 COPY data/ ./data/
 
+# Set PYTHONPATH
+ENV PYTHONPATH=/app
+
 # Default command (can be overridden)
-CMD ["python", "-m", "ml_project", "train"]
+CMD ["python", "-m", "training", "train"]

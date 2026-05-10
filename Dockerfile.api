@@ -8,18 +8,21 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 WORKDIR /app
 
-# Copy dependencies first for caching
+# Copy the entire workspace for uv sync (includes src/* packages)
 COPY pyproject.toml .
+COPY src/ ./src/
 
-# Install only production dependencies
-RUN uv pip install --system -r pyproject.toml
+# Install workspace packages (production only, no dev dependencies)
+RUN uv sync --no-dev
 
-# Copy application code
-COPY api/ ./api/
+# Copy models after install (they change more often)
 COPY models/ ./models/
+
+# Set PYTHONPATH so imports work (src.api becomes importable)
+ENV PYTHONPATH=/app
 
 # Expose API port
 EXPOSE 8000
 
 # Run the API
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

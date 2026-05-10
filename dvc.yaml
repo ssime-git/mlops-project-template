@@ -1,8 +1,9 @@
 stages:
   preprocess:
-    cmd: python -m ml_project preprocess
+    cmd: python -m training preprocess
     deps:
-      - src/ml_project
+      - src/training
+      - src/common
       - data/raw
     params:
       - preprocess
@@ -10,9 +11,10 @@ stages:
       - data/processed
 
   train:
-    cmd: python -m ml_project train
+    cmd: python -m training train
     deps:
-      - src/ml_project
+      - src/training
+      - src/common
       - data/processed
     params:
       - model
@@ -23,7 +25,7 @@ stages:
       - metrics/train_metrics.json
 
   evaluate:
-    cmd: python -m ml_project evaluate
+    cmd: python -m training evaluate
     deps:
       - models
       - data/processed
