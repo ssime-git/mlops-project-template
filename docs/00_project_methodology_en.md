@@ -332,21 +332,21 @@ mlops_project/
 
 ### Phase 2 : Microservices & Data Management
 - [ ] MLflow operational (experiment tracking)
-- [ la Data versioned via MinIO (S3/DVC)
+- [ ] la Data versioned via MinIO (S3/DVC)
 - [ ] Isolated training container (`Dockerfile.train`)
 - [ ] Orchestrated stack (`api` + `mlflow` + `minio`)
 
 ### Phase la 3 : Orchestration & Security
 - [ ] Orchestrator launched via Docker (Prefect/Airflow)
-- [ la Pipeline CI/CD functional (Build $\rightarrow$ Push)
+- [ ] la Pipeline CI/CD functional (Build $\rightarrow$ Push)
 - [ ] Secured API (JWT)
-- [ la Docker Compose updated with the orchestrator
+- [ ] la Docker Compose updated with the orchestrator
 
 ### Phase 4 : Monitoring & Observability
 - [ ] Prometheus & Grafana launched via Docker Compose
-- [ la Model drift monitoring (Evidently)
-L- [ ] Operational alerting
-- [ l’ Documentation final and runbooks
+- [ ] Model drift monitoring (Evidently)
+- [ ] Operational alerting
+- [ ] Documentation final and runbooks
 
 ## Customization of the Template
 
@@ -361,7 +361,6 @@ To adapt this template to your project:
 
 ## 📚 Complementary Resources
 
-- [Book "Engineering MLO la]](https://www.amazon.com/Engineering-MLOps-Immutable-pipeline-production-ebook/dp/B09XQX1JKF)
 - [Awesome MLOps](https://github.com/visenger/awesome-mlops)
 - [MLflow Documentation](https://mlflow.org/docs/latest/index.html)
 - [FastAPI Tutorial](https://fastapi.tiangolo.com/tutorial/)

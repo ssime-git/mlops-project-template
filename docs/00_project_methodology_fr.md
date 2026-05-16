@@ -341,13 +341,13 @@ mlops_project/
 - [ ] Orchestrateur lancé via Docker (Prefect/Airflow)
 - [ ] Pipeline CI/CD fonctionnel (Build $\rightarrow$ Push)
 - [ ] API sécurisée (JWT)
-- [ la Docker Compose mis à jour avec l'orchestrateur
+- [ ] la Docker Compose mis à jour avec l'orchestrateur
 
 ### Phase 4 : Monitoring & Observabilité
 - [ ] Prometheus & Grafana lancés via Docker Compose
 - [ ] Surveillance du drift (Evidently)
 - [ ] Alerting opérationnel
-- [ la Documentation finale et runbooks
+- [ ] la Documentation finale et runbooks
 
 
 ## Personnalisation du Template
@@ -364,7 +364,6 @@ Pour adapter ce template à votre projet :
 
 ## 📚 Ressources Complémentaires
 
-- [Livre "Engineering MLOps"](https://www.amazon.com/Engineering-MLOps-Immutable-pipeline-production-ebook/dp/B09XQX1JKF)
 - [Awesome MLOps](https://github.com/visenger/awesome-mlops)
 - [MLflow Documentation](https://mlflow.org/docs/latest/index.html)
 - [FastAPI Tutorial](https://fastapi.tiangolo.com/tutorial/)
