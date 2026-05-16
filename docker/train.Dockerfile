@@ -1,5 +1,5 @@
 # Training Container Dockerfile
-# Phase 1: Containerized training pipeline
+# Phase 2: Containerized training pipeline
 
 FROM python:3.10-slim
 
@@ -13,7 +13,7 @@ COPY pyproject.toml .
 COPY src/ ./src/
 COPY configs/ ./configs/
 
-# Install workspace packages (all dependencies including dev for debugging)
+# Install workspace packages (production only, no dev dependencies)
 RUN uv sync --no-dev
 
 # Copy data (can be mounted instead in production)

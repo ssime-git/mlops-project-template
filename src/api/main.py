@@ -4,60 +4,66 @@ FastAPI Inference Service
 Phase 1 deliverable: Basic inference API for ML model serving.
 """
 
-from typing import List
+import os
+import time
+from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import List
 
 import joblib
 import numpy as np
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
-from prometheus_client import Counter, Gauge, generate_latest
 from fastapi.responses import Response
+from prometheus_client import Counter, Gauge, generate_latest
+from pydantic import BaseModel, Field
 
 
 # Prometheus metrics
 INFERENCE_REQUESTS = Counter(
-    "inference_requests_total", 
+    "inference_requests_total",
     "Total number of inference requests"
 )
 MODEL_LOAD_TIME = Gauge(
-    "model_load_seconds", 
+    "model_load_seconds",
     "Time taken to load the model"
 )
 PREDICTIONS_MADE = Counter(
-    "predictions_total", 
+    "predictions_total",
     "Total predictions made"
 )
 
-# Global model variable
 model = None
-model_path = Path("models/model.joblib")
+model_path = Path(os.getenv("MODEL_PATH", "models/model.joblib"))
 
 
 def load_model() -> object:
-    """Load model from disk with timing metric."""
-    import time
-    start = time.time()
-    
     if not model_path.exists():
         return None
-    
-    model = joblib.load(model_path)
+    start = time.time()
+    loaded = joblib.load(model_path)
     MODEL_LOAD_TIME.set(time.time() - start)
-    return model
+    return loaded
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global model
+    model = load_model()
+    yield
 
 
 app = FastAPI(
     title="ML Inference API",
     description="Production inference service for ML models",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan,
 )
 
 
 # Request/Response models
 class PredictRequest(BaseModel):
     features: List[float] = Field(
-        ..., 
+        ...,
         description="Input features for prediction"
     )
 
@@ -71,13 +77,6 @@ class PredictResponse(BaseModel):
 class HealthResponse(BaseModel):
     status: str
     model_loaded: bool
-
-
-@app.on_event("startup")
-async def startup_event():
-    """Load model on startup."""
-    global model
-    model = load_model()
 
 
 @app.get("/health", response_model=HealthResponse)

@@ -6,8 +6,9 @@ stages:
       - src/common
       - data/raw
     params:
-      - preprocess
-    out:
+      - configs/train.yaml:
+          - data
+    outs:
       - data/processed
 
   train:
@@ -17,9 +18,10 @@ stages:
       - src/common
       - data/processed
     params:
-      - model
-      - training
-    out:
+      - configs/train.yaml:
+          - model
+          - training
+    outs:
       - models
     metrics:
       - metrics/train_metrics.json
@@ -29,8 +31,6 @@ stages:
     deps:
       - models
       - data/processed
-    params:
-      - evaluate
     metrics:
       - metrics/eval_metrics.json
     plots:

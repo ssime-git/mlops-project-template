@@ -15,7 +15,7 @@ services:
     environment:
       - MODEL_PATH=/app/models/model.joblib
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -29,8 +29,8 @@ services:
       - ./mlruns:/mlflow/backend/store
       - ./artifacts:/mlartifacts
     environment:
-      - MLFLOW.backend_store.uri=sqlite:///mlflow.db
-      - MLFLOW.default_artifact_root=/mlartifacts
+      - MLFLOW_BACKEND_STORE_URI=sqlite:////mlflow/backend/store/mlflow.db
+      - MLFLOW_DEFAULT_ARTIFACT_ROOT=/mlartifacts
     command: mlflow server --host 0.0.0.0 --port 5000
 
   # Prometheus monitoring (Phase 4)

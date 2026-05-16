@@ -4,19 +4,19 @@ install:
 	uv sync
 
 install-dev:
-	uv sync --extra dev
+	uv sync
 
 test:
 	pytest tests/ -v
 
 lint:
-	ruff check src/ml_project
+	ruff check src/
 
 format:
-	black src/ml_project tests/
+	ruff format src/ tests/
 
 typecheck:
-	mypy src/ml_project
+	mypy src/
 
 clean:
 	find . -type d -name __pycache__ -exec rm -rf {} +
@@ -24,7 +24,7 @@ clean:
 	rm -rf .pytest_cache .mypy_cache
 
 train:
-	python -m ml_project train --config configs/train.yaml
+	python -m training train --data configs/train.yaml
 
 mlflow:
 	mlflow ui
