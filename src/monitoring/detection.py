@@ -3,6 +3,7 @@ Drift Detection module.
 Run via: python -m monitoring.detection
 Or with custom config: python -m monitoring.detection drift.threshold=0.3
 """
+
 import logging
 from pathlib import Path
 
@@ -72,7 +73,11 @@ def detect_drift(cfg: DictConfig):
                 drift_score = metric["data_drift"].get("drift_share", 0)
                 log.info(f"Data drift score: {drift_score:.2%}")
                 if drift_score > cfg.drift.threshold:
-                    log.warning(f"DRIFT DETECTED! Drift score {drift_score:.2%} exceeds threshold {cfg.drift.threshold:.2%}")
+                    threshold_pct = f"{cfg.drift.threshold:.2%}"
+                    log.warning(
+                        f"DRIFT DETECTED! Drift score {drift_score:.2%} exceeds "
+                        f"threshold {threshold_pct}"
+                    )
                 else:
                     log.info("No significant drift detected.")
 

@@ -3,6 +3,7 @@ Preprocessing module.
 Run via: python -m training preprocess
 Or with custom config: python -m training preprocess preprocessing.test_size=0.3
 """
+
 import logging
 from pathlib import Path
 
@@ -56,10 +57,10 @@ def preprocess(cfg: DictConfig):
     random_state = cfg.preprocessing.random_state
 
     if "target" in df.columns:
-        X = df.drop(columns=["target"])
+        x = df.drop(columns=["target"])
         y = df["target"]
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=test_size, random_state=random_state
+        x_train, x_test, y_train, y_test = train_test_split(
+            x, y, test_size=test_size, random_state=random_state
         )
 
         # Create processed directory
@@ -67,8 +68,8 @@ def preprocess(cfg: DictConfig):
         processed_path.parent.mkdir(parents=True, exist_ok=True)
 
         # Save train and test sets
-        train_df = pd.concat([X_train, y_train], axis=1)
-        test_df = pd.concat([X_test, y_test], axis=1)
+        train_df = pd.concat([x_train, y_train], axis=1)
+        test_df = pd.concat([x_test, y_test], axis=1)
 
         # For simplicity, save as single file (in production, save separately)
         train_df.to_csv(processed_path, index=False)

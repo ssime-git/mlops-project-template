@@ -3,6 +3,7 @@ Evaluation module.
 Run via: python -m training evaluate
 Or with custom config: python -m training evaluate model.path=models/custom_model.joblib
 """
+
 import json
 import logging
 from pathlib import Path
@@ -47,14 +48,14 @@ def evaluate(cfg: DictConfig):
         # Separate features and target
         if "target" not in df.columns:
             log.warning("No 'target' column found. Using last column as target.")
-            X = df.iloc[:, :-1]
+            x = df.iloc[:, :-1]
             y = df.iloc[:, -1]
         else:
-            X = df.drop(columns=["target"])
+            x = df.drop(columns=["target"])
             y = df["target"]
 
         # Make predictions
-        y_pred = model.predict(X)
+        y_pred = model.predict(x)
 
         # Calculate metrics (placeholder - adapt to your problem type)
         metrics = {}
@@ -64,12 +65,16 @@ def evaluate(cfg: DictConfig):
             log.warning(f"Could not calculate accuracy: {e}")
 
         try:
-            metrics["precision"] = precision_score(y, y_pred, average="weighted", zero_division=0)
+            metrics["precision"] = precision_score(
+                y, y_pred, average="weighted", zero_division=0
+            )
         except Exception as e:
             log.warning(f"Could not calculate precision: {e}")
 
         try:
-            metrics["recall"] = recall_score(y, y_pred, average="weighted", zero_division=0)
+            metrics["recall"] = recall_score(
+                y, y_pred, average="weighted", zero_division=0
+            )
         except Exception as e:
             log.warning(f"Could not calculate recall: {e}")
 

@@ -3,6 +3,7 @@ Training module.
 Run via: python -m training train
 Or with custom config: python -m training train model=lightgbm training.cv_folds=10
 """
+
 import logging
 from pathlib import Path
 
@@ -26,7 +27,8 @@ def train(cfg: DictConfig):
     mlflow.set_experiment(cfg.mlflow.experiment_name)
     with mlflow.start_run(run_name="training"):
         # Log configuration
-        mlflow.log_params(OmegaConf.to_container(cfg, resolve=True))
+        params = OmegaConf.to_container(cfg, resolve=True)
+        mlflow.log_params(params)  # type: ignore[arg-type]
 
         # Load data
         train_path = Path(cfg.data.processed_path)
@@ -40,10 +42,10 @@ def train(cfg: DictConfig):
         # Separate features and target (assumes 'target' column exists)
         if "target" not in df.columns:
             log.warning("No 'target' column found. Using last column as target.")
-            X = df.iloc[:, :-1]
+            x = df.iloc[:, :-1]
             y = df.iloc[:, -1]
         else:
-            X = df.drop(columns=["target"])
+            x = df.drop(columns=["target"])
             y = df["target"]
 
         # Initialize model based on config
@@ -64,7 +66,7 @@ def train(cfg: DictConfig):
 
         # Train model
         log.info("Training model...")
-        model.fit(X, y)
+        model.fit(x, y)
 
         # Make output directory
         output_path = Path("models")
